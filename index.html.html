@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nigel Muponda — Portfolio</title>
+  <style>
+    :root{
+      --bg:#071a3a; /* dark blue background */
+      --card:#0f274b;
+      --muted:#9fb3d6;
+      --accent:#48b0ff;
+      --accent-2:#ffd24d;
+      --radius:12px;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      background:var(--bg);
+      color:#eaf3ff;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{max-width:980px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;gap:20px}
+    header{grid-column:1/-1;display:flex;align-items:center;gap:16px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#3a7ad9);display:flex;align-items:center;justify-content:center;font-weight:800;color:white}
+    h1{margin:0;font-size:20px}
+    .subtitle{color:var(--muted);font-size:13px}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:var(--radius);padding:18px}
+
+    aside .meta{margin-top:12px;color:var(--muted);font-size:14px}
+    .tag{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;margin:6px 6px 0 0;color:var(--accent-2);font-weight:600}
+
+    .skills{margin-top:14px}
+    .skill-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03)}
+    .skill-item:last-child{border-bottom:none}
+
+    .controls{display:flex;gap:10px;align-items:center;margin-top:14px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+    .btn.primary{background:var(--accent);color:#05243a;border:none}
+
+    main h2{margin-top:0}
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
+    .project{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .18s}
+    .project:hover{transform:translateY(-6px)}
+    .project-title{font-weight:700}
+    .project-sub{color:var(--muted);font-size:13px;margin-top:6px}
+
+    .search{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .search input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(rgba(2,6,23,0.6),rgba(2,6,23,0.8));z-index:60}
+    .modal .box{width:min(760px,95%);background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04)}
+
+    footer{grid-column:1/-1;margin-top:12px;color:var(--muted);text-align:center}
+
+    @media (max-width:880px){
+      .wrap{grid-template-columns:1fr;}
+      header{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">NM</div>
+      <div>
+        <h1>nigel muponda</h1>
+        <div class="subtitle">Age 21 • Harare, Zimbabwe</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Email: <strong id="emailText">mupondan@gmail.com</strong></div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <button id="copyBtn" class="btn">Copy Email</button>
+        <button id="downloadBtn" class="btn primary">Download Profile</button>
+      </div>
+    </header>
+
+    <aside class="card">
+      <div style="font-weight:800">Profile</div>
+      <div class="meta">
+        <div><strong>Residence:</strong> Harare, Zimbabwe</div>
+        <div style="margin-top:6px"><strong>Age:</strong> 21</div>
+        <div style="margin-top:6px"><strong>Email:</strong> mupondan@gmail.com</div>
+      </div>
+
+      <div class="skills">
+        <div style="font-weight:700;margin-top:12px">Skills</div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Filter skills by typing:</div>
+        <div style="margin-top:8px"><input id="skillFilter" placeholder="Search skills (eg: Python)" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit"></div>
+
+        <div id="skillsList" style="margin-top:10px">
+          <div class="skill-item" data-skill="java"><div>Java</div><div class="tag">Advanced</div></div>
+          <div class="skill-item" data-skill="html"><div>HTML</div><div class="tag">Advanced</div></div>
+          <div class="skill-item" data-skill="python"><div>Python</div><div class="tag">Intermediate</div></div>
+          <div class="skill-item" data-skill="css"><div>CSS</div><div class="tag">Advanced</div></div>
+          <div class="skill-item" data-skill="javascript"><div>JavaScript</div><div class="tag">Intermediate</div></div>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2>Projects</h2>
+          <div class="search">
+            <input id="projectSearch" placeholder="Search projects (eg: portal)" />
+            <button id="clearSearch" class="btn">Clear</button>
+          </div>
+        </div>
+
+        <div id="projects" class="projects">
+          <div class="project" data-id="p1">
+            <div class="project-title">Student Portal UI</div>
+            <div class="project-sub">Responsive portal for registration & results</div>
+          </div>
+          <div class="project" data-id="p2">
+            <div class="project-title">Portfolio Website</div>
+            <div class="project-sub">Personal portfolio showcasing web work</div>
+          </div>
+          <div class="project" data-id="p3">
+            <div class="project-title">Campus Noticeboard App</div>
+            <div class="project-sub">Lightweight noticeboard for students</div>
+          </div>
+          <div class="project" data-id="p4">
+            <div class="project-title">Design Mockups — Student Portal</div>
+            <div class="project-sub">Figma mockups and interaction prototypes</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:14px"></div>
+
+      <div class="card">
+        <h2>About</h2>
+        <div style="color:var(--muted);margin-top:8px">I am a Software Engineering student from Harare focused on web development and user-centered design. I build student portals, portfolios and small web apps. Available for collaboration and freelance work.</div>
+      </div>
+    </main>
+
+    <div class="modal" id="modal">
+      <div class="box" role="dialog" aria-modal="true">
+        <div id="modalContent"></div>
+        <div style="text-align:right;margin-top:12px"><button id="closeModal" class="btn">Close</button></div>
+      </div>
+    </div>
+
+    <footer>© Nigel Muponda • Portfolio</footer>
+  </div>
+
+  <script>
+    // Copy email
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      const text = document.getElementById('emailText').textContent;
+      try{
+        await navigator.clipboard.writeText(text);
+        const b = document.getElementById('copyBtn');
+        b.textContent = 'Copied!';
+        setTimeout(()=> b.textContent = 'Copy Email', 1400);
+      }catch(e){ alert('Copy failed — email: '+text) }
+    });
+
+    // Download profile JSON
+    document.getElementById('downloadBtn').addEventListener('click', (e)=>{
+      const profile = {
+        name:'nigel muponda', age:21, residence:'Harare, Zimbabwe', email:'mupondan@gmail.com', skills:['Java','HTML','Python','CSS','JavaScript'], projects:[
+          {id:'p1',title:'Student Portal UI',desc:'Responsive portal for registration & results'},
+          {id:'p2',title:'Portfolio Website',desc:'Personal portfolio showcasing web work'},
+          {id:'p3',title:'Campus Noticeboard App',desc:'Lightweight noticeboard for students'},
+          {id:'p4',title:'Design Mockups — Student Portal',desc:'Figma mockups and interaction prototypes'}
+        ]
+      };
+      const blob = new Blob([JSON.stringify(profile, null, 2)],{type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='nigel-portfolio.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // Project modal
+    const projects = document.getElementById('projects');
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    projects.addEventListener('click', (e)=>{
+      const card = e.target.closest('.project');
+      if(!card) return;
+      const id = card.dataset.id;
+      const data = {
+        p1:{title:'Student Portal UI',desc:'A modern responsive student portal supporting course registration, results, messaging and notifications. Built with HTML/CSS and JavaScript.'},
+        p2:{title:'Portfolio Website',desc:'A personal portfolio showcasing web development and design projects, responsive and accessible.'},
+        p3:{title:'Campus Noticeboard App',desc:'A lightweight web app for posting campus notices, events and opportunities.'},
+        p4:{title:'Design Mockups — Student Portal',desc:'Figma prototypes and interaction flows for improving student workflows.'}
+      }[id] || {title:'Project',desc:'Details coming soon.'};
+
+      modalContent.innerHTML = `<h3 style="margin:0">${data.title}</h3><p style="color:var(--muted);margin-top:8px">${data.desc}</p>`;
+      modal.style.display = 'flex';
+    });
+    document.getElementById('closeModal').addEventListener('click', ()=> modal.style.display='none');
+    modal.addEventListener('click',(e)=>{ if(e.target===modal) modal.style.display='none' });
+
+    // Project search
+    const projectSearch = document.getElementById('projectSearch');
+    const clearSearch = document.getElementById('clearSearch');
+    projectSearch.addEventListener('input', ()=>{
+      const q = projectSearch.value.trim().toLowerCase();
+      document.querySelectorAll('.project').forEach(p=>{
+        const txt = (p.querySelector('.project-title').textContent + ' ' + p.querySelector('.project-sub').textContent).toLowerCase();
+        p.style.display = txt.includes(q) ? '' : 'none';
+      });
+    });
+    clearSearch.addEventListener('click', ()=>{ projectSearch.value=''; projectSearch.dispatchEvent(new Event('input')) });
+
+    // Skill filter
+    const skillFilter = document.getElementById('skillFilter');
+    skillFilter.addEventListener('input', ()=>{
+      const q = skillFilter.value.trim().toLowerCase();
+      document.querySelectorAll('#skillsList .skill-item').forEach(s=>{
+        const name = s.dataset.skill || s.textContent.toLowerCase();
+        s.style.display = name.includes(q) ? '' : 'none';
+      });
+    });
+
+  </script>
+</body>
+</html>
+
+
